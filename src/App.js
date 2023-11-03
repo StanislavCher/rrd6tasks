@@ -1,31 +1,31 @@
-import {NavLink, Redirect, Route, Switch, useParams, useRouteMatch} from "react-router-dom";
+import {Navigate, NavLink, Outlet, Route, Routes, useParams} from "react-router-dom";
 
 function App() {
   return (
     <div>
         <h1>App Layout</h1>
-        <NavLink to='/users'>Users list Page</NavLink>
-        <Switch>
-            <Route path='/users' component={UsersLayout} />
-            <Route path='/' component={MainPage} />
-            <Redirect to='/' />
-        </Switch>
+        <NavLink to='users'>Users list Page</NavLink>
+        <Routes>
+            <Route path='/' element={<MainPage />} >
+                {/*<Route path='users/' element={<UsersLayout />} >*/}
+                {/*    <Route path={':userId/edit'} element={<UserEditPage />} />*/}
+                {/*    <Route path={':userId/profile'} element={<UserProfilePage />} />*/}
+                {/*    <Route path={''} element={<UsersListPage />} />*/}
+                {/*</Route>*/}
+            </Route>
+            {/*<Route index component={<MainPage />} />*/}
+        </Routes>
     </div>
   )
 }
 
 const UsersLayout = () => {
-    const { path } = useRouteMatch()
     return (
         <>
             <h1>Users Layout</h1>
-            <NavLink to='/'>Main Page</NavLink>
-            <Switch>
-                <Route path={path + '/:userId?/edit'} component={UserEditPage} />
-                <Route path={path + '/:userId?/profile'} component={UserProfilePage} />
-                <Route path={path} exact component={UsersListPage} />
-                <Redirect from={path + '/:userId?'} to={path + '/:userId?/profile'} />
-            </Switch>
+            <NavLink to='*'>Main Page</NavLink>
+            <Outlet />
+            <Navigate from={':userId?'} to={'/:userId?/profile'} />
         </>
     )
 }
@@ -39,7 +39,6 @@ const MainPage = () => {
 }
 
 const UsersListPage = () => {
-    const { path } = useRouteMatch()
     return (
         <>
             <div>
@@ -47,7 +46,7 @@ const UsersListPage = () => {
                 <ul>
                     {new Array(5).fill('').map((_, index) => {
                         return <li key={'user_key_' + index}>
-                                   <NavLink to={`${path}/${index}`}>User {index}</NavLink>
+                                   <NavLink to={`${index}`}>User {index}</NavLink>
                                </li>
                     })
                     }
