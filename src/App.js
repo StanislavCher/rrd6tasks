@@ -7,11 +7,11 @@ function App() {
         <NavLink to='users'>Users list Page</NavLink>
         <Routes>
             <Route path='/' element={<MainPage />} >
-                {/*<Route path='users/' element={<UsersLayout />} >*/}
-                {/*    <Route path={':userId/edit'} element={<UserEditPage />} />*/}
-                {/*    <Route path={':userId/profile'} element={<UserProfilePage />} />*/}
-                {/*    <Route path={''} element={<UsersListPage />} />*/}
-                {/*</Route>*/}
+                <Route path='users' element={<UsersListPage />} >
+                    <Route path={':userId/edit'} element={<UserEditPage />} />
+                    <Route path={':userId/profile'} element={<UserProfilePage />} />
+                    {/*<Route path={''} element={<UsersListPage />} />*/}
+                </Route>
             </Route>
             {/*<Route index component={<MainPage />} />*/}
         </Routes>
@@ -23,9 +23,9 @@ const UsersLayout = () => {
     return (
         <>
             <h1>Users Layout</h1>
-            <NavLink to='*'>Main Page</NavLink>
-            <Outlet />
-            <Navigate from={':userId?'} to={'/:userId?/profile'} />
+            <NavLink to='../'>Main Page</NavLink>
+            {/*<Outlet />*/}
+            {/*<Navigate from={':userId?'} to={'/:userId?/profile'} />*/}
         </>
     )
 }
@@ -34,6 +34,7 @@ const MainPage = () => {
     return (
         <>
             <h1>Main Page</h1>
+            <Outlet/>
         </>
     )
 }
@@ -46,7 +47,7 @@ const UsersListPage = () => {
                 <ul>
                     {new Array(5).fill('').map((_, index) => {
                         return <li key={'user_key_' + index}>
-                                   <NavLink to={`${index}`}>User {index}</NavLink>
+                                   <NavLink to={`${index}/profile`}>User {index}</NavLink>
                                </li>
                     })
                     }
@@ -58,6 +59,7 @@ const UsersListPage = () => {
 
 const UserProfilePage = () => {
     const { userId } = useParams()
+    // console.log(userId)
     return (
         <div>
             <h1>User Page</h1>
@@ -76,9 +78,9 @@ const UserEditPage = () => {
         <>
             <h1>Edit User Page</h1>
             <ul>
-                <li><NavLink to={`/users/${userId}`}>User profile Page</NavLink></li>
-                <li><NavLink to={`/users/${(+userId + 1) % 5}`}>Another User</NavLink></li>
-                <li><NavLink to='/users'>Users list Page</NavLink></li>
+                <li><NavLink to={`users/${userId}`}>User profile Page</NavLink></li>
+                <li><NavLink to={`users/${(+userId + 1) % 5}`}>Another User</NavLink></li>
+                <li><NavLink to='users'>Users list Page</NavLink></li>
             </ul>
         </>
     )
