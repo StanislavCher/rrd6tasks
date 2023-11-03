@@ -3,20 +3,30 @@ import {Navigate, NavLink, Outlet, Route, Routes, useParams} from "react-router-
 function App() {
   return (
     <div>
-        <h1>App Layout</h1>
-        <NavLink to='users'>Users list Page</NavLink>
+        {/*<h1>App Layout</h1>*/}
+        {/*<NavLink to='users'>Users list Page</NavLink>*/}
         <Routes>
-            <Route path='/' element={<MainPage />} >
-                <Route path='users' element={<UsersListPage />} >
+            <Route path='/' element={<AppLayout />} >
+                <Route index element={<MainPage />} />
+                <Route path='users' element={<UsersLayout />} >
+                    <Route path='' element={<UsersListPage />} />
                     <Route path={':userId/edit'} element={<UserEditPage />} />
                     <Route path={':userId/profile'} element={<UserProfilePage />} />
-                    {/*<Route path={''} element={<UsersListPage />} />*/}
                 </Route>
             </Route>
-            {/*<Route index component={<MainPage />} />*/}
         </Routes>
     </div>
   )
+}
+
+const AppLayout = () => {
+    return (
+        <>
+            <h1>App Layout</h1>
+            <NavLink to='users'>Users list Page</NavLink>
+            <Outlet />
+        </>
+    )
 }
 
 const UsersLayout = () => {
@@ -24,7 +34,7 @@ const UsersLayout = () => {
         <>
             <h1>Users Layout</h1>
             <NavLink to='../'>Main Page</NavLink>
-            {/*<Outlet />*/}
+            <Outlet />
             {/*<Navigate from={':userId?'} to={'/:userId?/profile'} />*/}
         </>
     )
@@ -78,9 +88,9 @@ const UserEditPage = () => {
         <>
             <h1>Edit User Page</h1>
             <ul>
-                <li><NavLink to={`users/${userId}`}>User profile Page</NavLink></li>
-                <li><NavLink to={`users/${(+userId + 1) % 5}`}>Another User</NavLink></li>
-                <li><NavLink to='users'>Users list Page</NavLink></li>
+                <li><NavLink to={`../${userId}/profile`}>User profile Page</NavLink></li>
+                <li><NavLink to={`../${(+userId + 1) % 5}/profile`}>Another User</NavLink></li>
+                <li><NavLink to='../'>Users list Page</NavLink></li>
             </ul>
         </>
     )
