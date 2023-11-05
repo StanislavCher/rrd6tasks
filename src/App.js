@@ -1,20 +1,68 @@
-import {Navigate, NavLink, Outlet, Route, Routes, useParams} from "react-router-dom";
+import {Navigate, NavLink, Outlet, useParams, useRoutes} from "react-router-dom";
 
 function App() {
+    const routs =  [{
+        path: '/',
+        element: <AppLayout />,
+        children: [
+            {
+                index: true,
+                element: <MainPage />
+            },
+            {
+                path: 'users',
+                element: <UsersLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <UsersListPage />
+                    },
+                    {
+                        path: ':userId',
+                        element: <Outlet />,
+                        children: [
+                            {
+                                path: 'edit',
+                                element: <UserEditPage />
+                            },
+                            {
+                                path: 'profile',
+                                element: <UserProfilePage />
+                            },
+                            {
+                                index: true,
+                                element: <Navigate to='profile' />
+                            },
+                            {
+                                path: '*',
+                                element: <Navigate to='../profile' />
+                            }
+                            ]
+                    }
+                ]
+            },
+            {
+                path: '*',
+                element: <Navigate to='/' />
+            }
+        ]
+    }]
+
+    const elements = useRoutes(routs)
+
   return (
     <div>
-        {/*<h1>App Layout</h1>*/}
-        {/*<NavLink to='users'>Users list Page</NavLink>*/}
-        <Routes>
-            <Route path='/' element={<AppLayout />} >
-                <Route index element={<MainPage />} />
-                <Route path='users' element={<UsersLayout />} >
-                    <Route path='' element={<UsersListPage />} />
-                    <Route path={':userId/edit'} element={<UserEditPage />} />
-                    <Route path={':userId/profile'} element={<UserProfilePage />} />
-                </Route>
-            </Route>
-        </Routes>
+        {elements}
+        {/*<Routes>*/}
+        {/*    <Route path='/' element={<AppLayout />} >*/}
+        {/*        <Route index element={<MainPage />} />*/}
+        {/*        <Route path='users' element={<UsersLayout />} >*/}
+        {/*            <Route path='' element={<UsersListPage />} />*/}
+        {/*            <Route path={':userId/edit'} element={<UserEditPage />} />*/}
+        {/*            <Route path={':userId/profile'} element={<UserProfilePage />} />*/}
+        {/*        </Route>*/}
+        {/*    </Route>*/}
+        {/*</Routes>*/}
     </div>
   )
 }
@@ -88,9 +136,9 @@ const UserEditPage = () => {
         <>
             <h1>Edit User Page</h1>
             <ul>
-                <li><NavLink to={`../${userId}/profile`}>User profile Page</NavLink></li>
-                <li><NavLink to={`../${(+userId + 1) % 5}/profile`}>Another User</NavLink></li>
-                <li><NavLink to='../'>Users list Page</NavLink></li>
+                <li><NavLink to={`/users/${userId}`}>User profile Page</NavLink></li>
+                <li><NavLink to={`/users/${(+userId + 1) % 5}/`}>Another User</NavLink></li>
+                <li><NavLink to='/users'>Users list Page</NavLink></li>
             </ul>
         </>
     )
